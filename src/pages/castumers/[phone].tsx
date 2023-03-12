@@ -72,11 +72,11 @@ export const Product = (props: any) => {
             id={props.product.id}
             src={props.product.Image}
             fill={true}
-            width={40}
-            height={40}
+            // width={40}
+            // height={40}
             sizes="(max-width: 380px) 100vw,
-            // (max-width: 1200px) 50vw,
-            // 33vw"
+            (max-width: 1200px) 50vw,
+            33vw"
             className=" mb-8 mt-4 h-40 rounded-2xl hover:bg-slate-300"
             alt="Image Alt"
             // loader={loaderProp}
