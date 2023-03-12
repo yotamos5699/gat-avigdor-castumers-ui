@@ -11,7 +11,13 @@
 const config = {
   reactStrictMode: true,
 
-  images: { domains: ["drive.google.com", "lh3.googleusercontent.com"] },
+  images: {
+    domains: [
+      "drive.google.com",
+      "lh3.googleusercontent.com",
+      "https://drive.google.com/",
+    ],
+  },
   /**
    * If you have the "experimental: { appDir: true }" setting enabled, then you
    * must comment the below `i18n` config out.
