@@ -67,25 +67,7 @@ export const Product = (props: any) => {
           -
         </p>
 
-        <div
-          className="sm:h-10/12 ... relative ml-8 mr-8  mb-8 h-48 w-48
-      
-      transform bg-gray-800 transition duration-500 ease-in-out hover:-translate-y-1 hover:scale-110 hover:bg-gray-300 sm:w-8/12
-      "
-        >
-          <Image
-            id={props.product.id}
-            src={props.product.Image}
-            fill={true}
-            sizes="(max-width: 768px) 100vw,
-          (max-width: 1200px) 50vw,
-          33vw"
-            className=" mb-8 mt-4 h-40 rounded-2xl hover:bg-slate-300"
-            alt="Image Alt"
-          />
-        </div>
-
-        {/* <div className="relative mr-2 ml-2  h-40  w-40 transform justify-center bg-gray-800 transition duration-500 ease-in-out hover:-translate-y-1 hover:scale-110 hover:bg-gray-300 ">
+        <div className="relative mr-2 ml-2  h-40  w-40 transform justify-center bg-gray-800 transition duration-500 ease-in-out hover:-translate-y-1 hover:scale-110 hover:bg-gray-300 ">
           <Image
             id={props.product.id}
             src={props.product.Image}
@@ -102,7 +84,7 @@ export const Product = (props: any) => {
           <div className="absolute top-1 left-1 h-1/4 w-1/4 rounded-full bg-red-300 p-4">
             ds
           </div>
-        </div> */}
+        </div>
         <p className="mt-4 flex h-40 w-6 items-center justify-center border-2 border-green-300 hover:bg-green-200">
           +
         </p>
