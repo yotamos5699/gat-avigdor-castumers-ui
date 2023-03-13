@@ -10,7 +10,7 @@ export const getUserByPhone = ({ data }: { data: any }) => {
       <div className="flex justify-center gap-28 ">
         <div className="mr-4  flex  max-w-xs  gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20">
           <p> שלום </p>
-          <p>{data.data.user.name}</p>
+          <p>{data.data?.user?.name}</p>
         </div>
         <a
           className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20"
@@ -40,10 +40,14 @@ export const userData = async (id: any) => {
         id.phone,
       { withCredentials: false }
     )
-    .then((res) => res.data)
+    .then((res) => {
+      const data = res.data;
+      console.log({ data });
+      return data;
+    })
     .catch((e) => console.log);
 };
-
+//https://script.google.com/macros/s/AKfycbyfBt4Ueq6GAULew28xiJrl7T-dIfNDkNm1VZmAzLiD1MySjnTkP5icgtCARxNZ_wN4/exec?type=validate&id=502844123
 export async function getServerSideProps(context: any) {
   const { params } = context;
   const response = await userData(params);
