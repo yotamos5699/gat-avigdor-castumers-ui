@@ -13,6 +13,14 @@ const config = {
   reactStrictMode: true,
 
   images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "google.com",
+        port: "",
+        // pathname: '/account123/**',
+      },
+    ],
     domains: [
       "drive.google.com",
       "lh3.googleusercontent.com",
