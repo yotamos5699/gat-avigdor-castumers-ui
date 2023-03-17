@@ -16,8 +16,14 @@ const config = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "google.com",
-        port: "",
+        hostname: "**.google.com",
+
+        // pathname: '/account123/**',
+      },
+      {
+        protocol: "https",
+        hostname: "**.google.com/",
+
         // pathname: '/account123/**',
       },
     ],
