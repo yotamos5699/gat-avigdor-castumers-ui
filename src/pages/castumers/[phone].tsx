@@ -151,13 +151,13 @@ export const Product = (props: any) => {
         </button>
 
         <div className="relative mr-2 ml-2  h-40  w-40 transform justify-center bg-gray-800 transition duration-500 ease-in-out hover:-translate-y-1 hover:scale-110 hover:bg-gray-300 ">
-          <Image
+          <img
             id={props.product.id}
             // src={props.product.Image}
             src={
               "https://drive.google.com/uc?export=view&id=1Iz9dQZZ165AfYxtXxykCTrn54XS1Dkvy"
             }
-            fill={true}
+            //fill={true}
             // width={40}
             // height={40}
             // sizes="(max-width: 380px) 100vw,
