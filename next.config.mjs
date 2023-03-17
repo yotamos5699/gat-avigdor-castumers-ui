@@ -15,9 +15,8 @@ const config = {
   images: {
     remotePatterns: [
       {
-        hostname: "drive.google.com",
-
-        // pathname: '/account123/**',
+        protocol: "https",
+        hostname: "**",
       },
     ],
     domains: [
