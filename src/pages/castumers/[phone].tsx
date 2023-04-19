@@ -210,9 +210,7 @@ export const Product = (props: any) => {
           <img
             id={props.product.id}
             // src={props.product.Image}
-            src={
-              "https://drive.google.com/uc?export=view&id=1Iz9dQZZ165AfYxtXxykCTrn54XS1Dkvy"
-            }
+            src={props.product.Image}
             //fill={true}
             // width={40}
             // height={40}
