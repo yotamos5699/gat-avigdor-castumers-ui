@@ -16,6 +16,7 @@ export const getUserByPhone = ({ data }: { data: any }) => {
   const [uuser, setUser] = useState(() => data.data.user);
   const [orderd, setOrderd] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [isAllow, setIsAllow] = useState(false);
   const editProductAmount = (name: string, id: any, value?: any) => {
     let newProductsArray: any[] = [];
     if (!Products) return;
@@ -39,6 +40,10 @@ export const getUserByPhone = ({ data }: { data: any }) => {
     // setProducts();
   };
   useEffect(() => {
+    setIsAllow(data.status);
+    if (data.status == false) {
+      return;
+    }
     if (!Products) {
       console.log("initializing products...");
       let newArray: any[] = [];
@@ -83,6 +88,10 @@ export const getUserByPhone = ({ data }: { data: any }) => {
         </div>
       ) : loading ? (
         <Spinner />
+      ) : !isAllow ? (
+        <div className="flex h-screen flex-col items-center justify-center">
+          <p className="text-3xl"> קישור לא תקין או לא מורשה</p>
+        </div>
       ) : !orderd ? (
         <div dir="rtl" className="h-screen">
           <div className="mb-4 mt-1 flex justify-center gap-2">
