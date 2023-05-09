@@ -193,7 +193,7 @@ export const Product = (props: any) => {
   useEffect(() => {
     if (debounceValue) {
       const limit = props.product.limit;
-      const val = input <= limit ? input : limit;
+      const val = limit == "" ? input : input <= limit ? input : limit;
       props.editProductAmount(event.target.name, event.target.id, val);
       val != input && setInput(val);
     }
@@ -218,17 +218,9 @@ export const Product = (props: any) => {
         <div className="relative mr-2 ml-2  h-40  w-40 transform justify-center bg-gray-800 transition duration-500 ease-in-out hover:-translate-y-1 hover:scale-110 hover:bg-gray-300 ">
           <img
             id={props.product.id}
-            // src={props.product.Image}
             src={props.product.Image}
-            //fill={true}
-            // width={40}
-            // height={40}
-            // sizes="(max-width: 380px) 100vw,
-            // (max-width: 1200px) 50vw,
-            // 33vw"
             className=" mb-8 mt-4 h-40 rounded-2xl hover:bg-slate-300"
             alt="Image Alt"
-            // loader={loaderProp}
           />
           <input
             id={props.product.id}
@@ -247,11 +239,12 @@ export const Product = (props: any) => {
             className="absolute top-1 left-1 flex h-1/4 w-1/2 items-center justify-center rounded-lg bg-green-600  p-4 text-center  "
             value={inFocus ? input : props.product.amount}
           />
-          {props.product.amount == props.product.limit && (
-            <p className="absolute top-11 left-1 flex h-4 w-1/2 justify-center rounded-lg border-2 border-red-500 text-center  text-[8px] font-bold text-black ">
-              הגבלת כמות !
-            </p>
-          )}
+          {props.product.amount == props.product.limit &&
+            props.product.limit != "" && (
+              <p className="absolute top-11 left-1 flex h-4 w-1/2 justify-center rounded-lg border-2 border-red-500 text-center  text-[8px] font-bold text-black ">
+                הגבלת כמות !
+              </p>
+            )}
         </div>
 
         <button
