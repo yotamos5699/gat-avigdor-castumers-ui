@@ -58,12 +58,20 @@ export const getUserByPhone = ({ data }: { data: any }) => {
 
     if (!Products) return;
     const now = new Date();
-    const rowID = Math.floor(Math.random() * 1000000);
+
     const User = data.data.user;
-    const castumer = [now, rowID, User.name, User.key, User.phone];
+    const castumer = [
+      now,
+      crypto.randomUUID(),
+      User.name,
+      User.key,
+      User.phone,
+    ];
     for (let i = 0; i <= Products?.length - 1; i++) {
       if (Products[i].amount == 0) continue;
+      // const rowID = Math.floor(Math.random() * 1000000);
       let row = [
+        crypto.randomUUID(),
         ...castumer,
         Products[i].name,
         Products[i].key,
