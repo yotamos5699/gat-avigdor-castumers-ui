@@ -1,9 +1,11 @@
 import axios from "axios";
 import Model from "../../components/Module";
-import { type } from "os";
+// import { type } from "os";
+import { tableNamesHash } from "~/constants";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { formatDate } from "~/utils/helper";
 import Spinner from "~/components/Spinner";
+import { set } from "zod";
 
 export async function getServerSideProps(context: any) {
   const { params } = context;
@@ -24,23 +26,65 @@ export async function getServerSideProps(context: any) {
 export const AdminData = ({ data }: { data: any }) => {
   const [viewType, setViewType] = useState("לא מויינו");
   const [produceModule, togleProduceModule] = useState(false);
+  const [globalChecking, setGlobalChecking] = useState({
+    matrix: false,
+    delete: false,
+    reset: false,
+  });
 
+  const [statusCounter, setStatusCounter] = useState({
+    למחוק: 0,
+    במטריצה: 0,
+    "לא מויינו": 0,
+    global: 0,
+  });
   const [loading, setLoading] = useState(false);
   const { headers, ordersData, setOrdersData } = useAdminData(data, loading);
   // useEffect(() => {}, [adminData, headers]);
 
   const handleClick = (e: any, lineID: any, type: string, from?: string) => {
     if (from && from == "row")
-      setOrdersData((prev) =>
-        prev?.map((line) =>
-          line.rowID == lineID ? { ...line, status: type } : line
-        )
-      );
+      setOrdersData((prev) => {
+        let prevStatus: any;
+        const newArray = prev?.map((line) => {
+          if (line.rowID == lineID) {
+            prevStatus = line.status ?? null;
+            return { ...line, status: type };
+          }
+          return line;
+        });
+        if (prevStatus)
+          setStatusCounter((prev) => ({
+            ...prev,
+            [type]: prev[type as keyof typeof prev] + 1,
+            [prevStatus]: prev[prevStatus as keyof typeof prev] - 1,
+          }));
+        return newArray;
+      });
   };
 
   useEffect(() => {
-    console.log({ headers, ordersData });
-  }, [headers, ordersData]);
+    console.log({ statusCounter, globalChecking });
+    // if (statusCounter.global != 0) {
+    //   if (statusCounter.במטריצה == statusCounter.global)
+    //     setGlobalChecking((prev) => ({ ...prev, matrix: true }));
+    //   else setGlobalChecking((prev) => ({ ...prev, matrix: false }));
+
+    //   if (statusCounter.למחוק == statusCounter.global)
+    //     setGlobalChecking((prev) => ({ ...prev, delete: true }));
+    //   else setGlobalChecking((prev) => ({ ...prev, delete: false }));
+    //   if (statusCounter["לא מויינו"] == statusCounter.global)
+    //     setGlobalChecking((prev) => ({ ...prev, reset: true }));
+    //   else setGlobalChecking((prev) => ({ ...prev, reset: false }));
+    // }
+    if (ordersData && statusCounter.global == 0)
+      setStatusCounter((prev) => ({
+        ...prev,
+        global: ordersData.length,
+        "לא מויינו": ordersData.length,
+      }));
+    console.log({ ordersData });
+  }, [ordersData]);
   return (
     <div className={" flex flex-col items-center justify-center"}>
       {loading ? (
@@ -87,16 +131,78 @@ export const AdminData = ({ data }: { data: any }) => {
               הפק
             </button>
           </div>
+
+          <button
+            className={
+              "mb-2 flex w-1/12  justify-center bg-blue-300 text-[10px] font-bold text-gray-700 hover:bg-white hover:text-black"
+            }
+            onClick={() => {
+              setGlobalChecking((prev) => ({
+                ...prev,
+                reset: !globalChecking.reset,
+              }));
+              setOrdersData((prev) =>
+                prev?.map((p) => ({
+                  ...p,
+                  status: "לא מויינו",
+                }))
+              );
+            }}
+          >
+            אפס
+          </button>
+
           {headers && (
             <div className="mb-4 flex w-full  flex-row-reverse justify-center">
-              {headers.map((cell: any, index: number) => {
+              {headers.map((cell: string, index: number) => {
                 if (index !== 0 && index !== 2)
-                  return <p className="w-1/6 text-center text-[8px]">{cell}</p>;
+                  return (
+                    <p className="w-1/6 text-center text-[8px]">
+                      {tableNamesHash[cell as keyof typeof tableNamesHash]}
+                    </p>
+                  );
               })}
-              <button className="w-1/6 bg-green-400 text-[8px] font-bold text-black">
-                למטריצה
-              </button>
-              <button className="w-1/6 bg-red-400 text-[8px]">למחוק</button>
+              <div className="flex w-1/6 justify-between  bg-green-400 text-[8px] font-bold text-black">
+                <input
+                  onChange={(e) => {
+                    const action = e.target.checked;
+
+                    setGlobalChecking((prev) => ({
+                      ...prev,
+                      matrix: !globalChecking.matrix,
+                    }));
+                    setOrdersData((prev) =>
+                      prev?.map((p) => ({
+                        ...p,
+                        status: action ? "במטריצה" : "לא מויינו",
+                      }))
+                    );
+                  }}
+                  checked={globalChecking.matrix}
+                  type="checkbox"
+                />
+                <button className="mr-1">למטריצה</button>
+              </div>
+              <div className="flex w-1/6 justify-between  bg-red-400 text-[8px] font-bold text-white">
+                <input
+                  onChange={(e) => {
+                    const action = e.target.checked;
+                    setGlobalChecking((prev) => ({
+                      ...prev,
+                      delete: !globalChecking.delete,
+                    }));
+                    setOrdersData((prev) =>
+                      prev?.map((p) => ({
+                        ...p,
+                        status: action ? "למחוק" : "לא מויינו",
+                      }))
+                    );
+                  }}
+                  checked={globalChecking.delete}
+                  type="checkbox"
+                />
+                <button className="mr-1">למחוק</button>
+              </div>
             </div>
           )}
           <TableData
@@ -210,7 +316,7 @@ const useAdminData = (
     const processdTableData = ordersTableData.map((row: OrderLine) => ({
       ...row,
       date: f.format(new Date(row.date)),
-      delivery_time: f.format(new Date(row.delivery_time)),
+      delivery_time: f.format(new Date(row.delivery_time)) ?? "",
       type: "הזמנות",
       status: "לא מויינו",
     }));
