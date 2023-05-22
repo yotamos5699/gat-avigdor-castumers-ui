@@ -13,11 +13,7 @@ const getSavedValue = (key: string, initialValue: any) => {
   return initialValue;
 };
 
-type LsValue = {
-  data: any;
-  subKey?: string | null;
-};
-const useLocalStorage = (key: string, initialValue: LsValue) => {
+const useLocalStorage = (key: string, initialValue: any) => {
   const [value, setValue] = useState(() => {
     return getSavedValue(key, initialValue);
   });
