@@ -44,11 +44,23 @@ export const AdminData = ({ data }: { data: any }) => {
 
   const handleClick = (e: any, lineID: any, type: string, from?: string) => {
     if (from && from == "row")
-      setOrdersData((prev) =>
-        prev?.map((line) =>
-          line.rowID == lineID ? { ...line, status: type } : line
-        )
-      );
+      setOrdersData((prev) => {
+        let prevStatus: any;
+        const newArray = prev?.map((line) => {
+          if (line.rowID == lineID) {
+            prevStatus = line.status ?? null;
+            return { ...line, status: type };
+          }
+          return line;
+        });
+        if (prevStatus)
+          setStatusCounter((prev) => ({
+            ...prev,
+            [type]: prev[type as keyof typeof prev] + 1,
+            [prevStatus]: prev[prevStatus as keyof typeof prev] - 1,
+          }));
+        return newArray;
+      });
   };
 
   return (

@@ -1,0 +1,16 @@
+export const tableNamesHash = {
+  rowID: "מ שורה",
+  date: "ת יצירה",
+  actionID: "מ פעולה",
+  castumer_name: "שם לקוח",
+  castumer_ID: "מ לקוח",
+  phone: "טלפון",
+  product_name: "שם פריט",
+  product_ID: "מ פריט",
+  amount: "כמות",
+  delivery_time: "ת אספקה",
+  castumer_type: "סוג לקוח",
+  measuring_unit: "יח מדידה",
+  type: "סוג שורה",
+  status: "סטטוס",
+};
