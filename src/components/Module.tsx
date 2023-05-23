@@ -1,7 +1,7 @@
 import axios from "axios";
 import { Dispatch, SetStateAction, useState } from "react";
+import { OrderLine } from "~/hooks/admin/helper";
 // import { date } from "zod";
-import { OrderLine } from "~/pages/admin/[password]";
 
 const handleSendedLines = async (
   data: OrderLine[],
