@@ -1,5 +1,4 @@
-import { handler } from "@tailwindcss/line-clamp";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 function useDebouncs(value: string, delay: number) {
   const [debouncedValue, setDebouncedValue] = useState<string | undefined>();
