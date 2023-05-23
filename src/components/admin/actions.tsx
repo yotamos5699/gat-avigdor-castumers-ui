@@ -7,9 +7,9 @@ import { AdminDataContext } from "~/context/adminContext";
 
 function Actions() {
   const [isOpen, toggleIsOpen] = useState(false);
-  const { push } = useRouter();
+  const { setRenderdScreen } = useContext(AdminDataContext);
   return (
-    <div className="absolute top-2 right-2">
+    <div className="fixed top-2 right-2">
       {!isOpen ? (
         <ul className="menu rounded-box  bg-base-100">
           <li>
@@ -19,33 +19,35 @@ function Actions() {
           </li>
         </ul>
       ) : (
-        <ul className="menu rounded-box  bg-base-100">
-          <li>
-            <a
-              onClick={() => {
-                toggleIsOpen(!isOpen);
-                push("/admin/123");
-              }}
-            >
-              <AiOutlineHome className=" text-blue-300" size={"20px"} />
-            </a>
-          </li>
-          <li>
-            <a
-              onClick={() => {
-                push("/config");
-                toggleIsOpen(!isOpen);
-              }}
-            >
-              <AiOutlineSetting className=" text-blue-300" size={"20px"} />
-            </a>
-          </li>
-          <li>
-            <a onClick={() => toggleIsOpen(!isOpen)}>
-              <MdOutlinePreview className=" text-blue-300" size={"20px"} />
-            </a>
-          </li>
-        </ul>
+        setRenderdScreen && (
+          <ul className="menu rounded-box  bg-base-100">
+            <li>
+              <a
+                onClick={() => {
+                  toggleIsOpen(!isOpen);
+                  setRenderdScreen("admin");
+                }}
+              >
+                <AiOutlineHome className=" text-blue-300" size={"20px"} />
+              </a>
+            </li>
+            <li>
+              <a
+                onClick={() => {
+                  toggleIsOpen(!isOpen);
+                  setRenderdScreen("main");
+                }}
+              >
+                <AiOutlineSetting className=" text-blue-300" size={"20px"} />
+              </a>
+            </li>
+            <li>
+              <a onClick={() => toggleIsOpen(!isOpen)}>
+                <MdOutlinePreview className=" text-blue-300" size={"20px"} />
+              </a>
+            </li>
+          </ul>
+        )
       )}
     </div>
   );

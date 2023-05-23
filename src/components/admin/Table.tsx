@@ -7,19 +7,26 @@ interface Row {
   handleClick: (e: any, lineID: any, type: string, from: string) => void;
 }
 const Row = ({ row, handleClick }: Row) => {
-  const { appData, headers } = useContext(AdminDataContext);
+  const { headers } = useContext(AdminDataContext);
   // console.log({ headers, appData });
   return (
-    <div className="flex w-full flex-row-reverse text-5xl text-white  ">
+    <div
+      key={JSON.stringify(row)}
+      className="flex h-1/6 w-full flex-row-reverse items-center p-2 text-center  text-5xl text-white shadow-lg "
+    >
       {Object.values(row).map((cell: string, index: number) => {
         if (headers && headers[index]?.toShow) {
-          return <p className="z-50 w-1/6 text-[8px]">{cell}</p>;
+          return (
+            <p key={index} className="z-50 w-1/3 text-center text-[8px]">
+              {cell}
+            </p>
+          );
         }
       })}
       {row.status != "במטריצה" && (
         <button
           onClick={(e) => handleClick(e, row.rowID, "במטריצה", "row")}
-          className="w-1/6 bg-green-400 text-[8px] font-bold text-black"
+          className="w-1/3 bg-green-400 text-[8px] font-bold text-black"
         >
           למטריצה
         </button>
@@ -27,15 +34,15 @@ const Row = ({ row, handleClick }: Row) => {
       {row.status != "למחוק" && (
         <button
           onClick={(e) => handleClick(e, row.rowID, "למחוק", "row")}
-          className="w-1/6 bg-red-400 text-[8px]"
+          className="w-1/3 bg-red-400 text-[8px]"
         >
           למחוק
         </button>
       )}
-      {row.status != "לא מויינו" && (
+      {row.status != "ללא" && (
         <button
-          onClick={(e) => handleClick(e, row.rowID, "לא מויינו", "row")}
-          className="w-1/6 bg-blue-300 text-[8px] font-bold  text-gray-700"
+          onClick={(e) => handleClick(e, row.rowID, "ללא", "row")}
+          className="w-1/3 bg-blue-300 text-[8px] font-bold  text-gray-700"
         >
           איפוס
         </button>
@@ -45,21 +52,31 @@ const Row = ({ row, handleClick }: Row) => {
 };
 
 const TableData = (props: any) => {
-  const { headers } = useContext(AdminDataContext);
-
   // console.log("in table component", { headers });
   return (
-    <>
+    <div className="h-full border-2 border-gray-600">
       {props.data &&
-        props.data.map((row: any, index: number) => {
+        props.data.map((row: OrderLine, index: number) => {
           console.log("props type", props.type);
           if (props.type == "הכל")
-            return <Row row={row} handleClick={props.handleClick} />;
+            return (
+              <Row
+                key={index + row.date}
+                row={row}
+                handleClick={props.handleClick}
+              />
+            );
           if (props.type == row.status) {
-            return <Row row={row} handleClick={props.handleClick} />;
+            return (
+              <Row
+                key={index + row.date}
+                row={row}
+                handleClick={props.handleClick}
+              />
+            );
           }
         })}
-    </>
+    </div>
   );
 };
 

@@ -1,3 +1,6 @@
+import axios from "axios";
+// const baseDbUrl = "http://localhost:4000/"
+const baseDbUrl = "https://bizmod-database-server.onrender.com/";
 export interface OrderLine {
   rowID: string | number;
   date: string;
@@ -16,6 +19,8 @@ export interface OrderLine {
 }
 
 export interface headerType {
+  colID?: any;
+  position?: number;
   initialName?: string | undefined;
   replacmentName?: string | null;
   toShow?: boolean;
@@ -32,7 +37,10 @@ import { AdminDataContext } from "~/context/adminContext";
 import { formatDate } from "~/utils/helper";
 
 export const useAdminData = (
-  data: { orders: OrderLine[] | undefined; headers: headerType[] | null },
+  data: {
+    orders: OrderLine[] | undefined;
+    config: { headers: headerType[] | null };
+  },
   loading: boolean
 ): {
   headers: headerType[] | null;
@@ -53,7 +61,7 @@ export const useAdminData = (
       date: f.format(new Date(row.date)),
       delivery_time: f.format(new Date(row.delivery_time)),
       type: "הזמנות",
-      status: "לא מויינו",
+      status: "ללא",
     }));
     setOrdersData([...processdTableData]);
     setAppData && setAppData({ tableData: [...processdTableData] });
@@ -62,40 +70,12 @@ export const useAdminData = (
       setHeaders(
         handleHeadersList(
           Object.keys({ ...processdTableData[0] }),
-          data.headers
+          data.config.headers
         )
       );
   }, [loading]);
 
   return { headers, ordersData, setOrdersData };
-};
-
-const updateConfig = async (headersArray: headerType[]) => {
-  const axios = require("axios");
-  let data = JSON.stringify({
-    Date: 42314,
-    userID: "123123",
-    headersConfig: [...headersArray],
-  });
-
-  let config = {
-    method: "post",
-    maxBodyLength: Infinity,
-    url: "localhost:4000/bizi_row/set_config",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    data: data,
-  };
-
-  axios
-    .request(config)
-    .then((response: { data: { status: boolean; data: any } }) => {
-      console.log(JSON.stringify(response.data));
-    })
-    .catch((error: any) => {
-      console.log(error);
-    });
 };
 
 const handleHeadersList = (
@@ -104,35 +84,89 @@ const handleHeadersList = (
 ): headerType[] => {
   console.log({ headers, fetchedHeadersData });
   if (!fetchedHeadersData) {
-    console.log("passed the if");
-    const x = headers.map((h: string) => ({
-      initialName: h,
-      replacmentName: h,
-      toShow: true,
-    }));
+    const x = headers.map(
+      (h: string, index: number): headerType => ({
+        initialName: h,
+        replacmentName: h,
+        toShow: true,
+        colID: crypto.randomUUID(),
+        position: index,
+      })
+    );
     console.log({ x });
+    updateConfig(x);
     return x;
   }
   let HeadersArray: headerType[] = [];
+  HeadersArray = [...fetchedHeadersData];
   let ChangesCounter = 0;
   for (let i = 0; i <= headers.length - 1; i++) {
     let isIn = false;
     for (let j = 0; j <= fetchedHeadersData.length - 1; j++) {
       if (headers[i] == fetchedHeadersData[j]?.initialName) {
-        ChangesCounter += 1;
         isIn = true;
-        HeadersArray.push({ ...fetchedHeadersData[j] });
-      }
-      if (!isIn) {
-        HeadersArray.push({
-          initialName: headers[i],
-          replacmentName: headers[i],
-          toShow: true,
-        });
       }
     }
+
+    if (!isIn) {
+      ChangesCounter += 1;
+      HeadersArray.push({
+        initialName: headers[i],
+        replacmentName: headers[i],
+        toShow: true,
+        colID: crypto.randomUUID(),
+        position: i,
+      });
+    }
   }
-  console.log({ HeadersArray });
+  console.log({ ChangesCounter, HeadersArray });
   if (ChangesCounter > 0) updateConfig(HeadersArray);
   return HeadersArray;
+};
+
+export const updateConfig = async (headersArray: headerType[]) => {
+  const options = {
+    url: baseDbUrl + "bizi_row/set_config",
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json;charset=UTF-8",
+    },
+    data: {
+      Date: 42314,
+      userID: "123123",
+      headersConfig: [...headersArray],
+    },
+  };
+
+  return await axios(options)
+    .then((response) => {
+      console.log(response.data);
+      response.data;
+    })
+    .catch((err) => console.log({ err }));
+};
+
+export const getConfig = async (): Promise<{
+  status: boolean;
+  data: { headersConfig: headerType[] };
+}> => {
+  const options = {
+    url: baseDbUrl + "bizi_row/get_config",
+    method: "POST",
+    maxBodyLength: Infinity,
+    headers: {
+      "Content-Type": "application/json",
+    },
+    data: {
+      userID: "123123",
+    },
+  };
+
+  return await axios(options)
+    .then((response) => {
+      console.log({ response });
+      return response.data;
+    })
+    .catch((err) => console.log({ err }));
 };
