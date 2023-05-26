@@ -78,6 +78,7 @@ export const AdminDataContextProvider = ({
   children,
 }: ThemeContextProviderProps) => {
   const [appData, setAppData] = useState<any | undefined>();
+  // const [user,setUser] = useL
   const [viewType, setViewType] = useState("ללא");
   const [renderdScreen, setRenderdScreen] = useState("admin");
   // const [appData, setAppData] = useLocalStorage("app_data", null);
