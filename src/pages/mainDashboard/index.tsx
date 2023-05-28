@@ -1,35 +1,66 @@
 import { useSession } from "next-auth/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AuthShowcase } from "..";
 import { FaTasks } from "react-icons/fa";
 import Actions from "~/components/mainDashboard/actions";
-import mD from "../../../MOCK_DATA.json";
-function MainDashboard() {
-  const { data: sessionData } = useSession();
-  const [currentData, setCurrentData] = useState<string | null>(null);
-  return (
-    <div className="mt-16 flex h-screen justify-center ">
-      <main className="relative  flex min-h-[90%] w-[90%] flex-col items-center  justify-center rounded-md bg-gradient-to-b from-[#3e1479] to-[#1f203d] shadow-lg shadow-[#7a5ba5]">
-        <Nav setCurrentData={setCurrentData} />
+import mD from "../../constants/jsonData/MOCK_DATA.json";
+import {
+  TableDataContextProvider,
+  useTableData,
+} from "~/components/global/Table/TableContext";
+import { HeadersDiv, TableRows } from "~/components/global/Table/TableWaraper";
+import { useRouter } from "next/router";
+import { AiOutlineHome } from "react-icons/ai";
 
-        {currentData == "table" && <Table />}
-        {/* <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
-            <span className="text-[hsl(280,100%,70%)]">dashBoard</span> Mode
-          </h1> */}
+function MainDashboard() {
+  const [currentData, setCurrentData] = useState<string>("home");
+  const { push } = useRouter();
+  useEffect(() => {
+    if (currentData == "modules") push("mainDashboard/modules");
+  }, [currentData]);
+
+  return (
+    <div className="flex h-screen w-full justify-center ">
+      <main className="relative flex min-h-screen w-[98%] flex-col">
+        <Nav setCurrentData={setCurrentData} currentData={currentData} />
+        {currentData == "table" && (
+          <TableDataContextProvider>
+            <Table />
+          </TableDataContextProvider>
+        )}
       </main>
     </div>
   );
 }
 
+const Table = () => {
+  const { initiateTable, TableData } = useTableData();
+  useEffect(() => {
+    initiateTable(mD);
+  }, []);
+  useEffect(() => {
+    console.log({ TableData });
+  }, [TableData]);
+  return (
+    <div className={`static  mt-28  h-screen `}>
+      <HeadersDiv Headers={TableData.Headers} />
+      <TableRows Rows={TableData.CellsData} />
+    </div>
+  );
+};
+
 export default MainDashboard;
 
-const Nav = ({
+export const Nav = ({
   setCurrentData,
+  currentData,
 }: {
-  setCurrentData: React.Dispatch<React.SetStateAction<string | null>>;
+  setCurrentData: React.Dispatch<React.SetStateAction<string>>;
+  currentData: string;
 }) => {
+  const { push } = useRouter();
   return (
-    <div className="absolute top-0 z-50 flex w-full flex-row-reverse justify-between rounded-sm bg-base-100 shadow-lg  shadow-gray-600">
+    <div className="fixed top-0 z-50 flex h-12 w-full flex-row-reverse justify-between rounded-sm bg-base-100 shadow-lg  shadow-gray-600">
       <div className="navbar-start w-auto ">
         <div className="dropdown ">
           <label tabIndex={0} className="btn-ghost btn-circle btn">
@@ -50,27 +81,43 @@ const Nav = ({
           </label>
           <ul
             tabIndex={0}
-            className="dropdown-content menu rounded-box menu-compact mt-3 w-52 bg-base-100 p-2 shadow"
+            className="dropdown-content menu rounded-box menu-compact absolute right-0 mt-1 w-24 items-center  bg-base-100 text-center shadow"
           >
             <li>
-              <a>תשלומים</a>
+              <a className="text-center">תשלומים</a>
             </li>
             <li>
-              <a>תצוגה</a>
+              <a className="text-center">תצוגה</a>
             </li>
             <li>
-              <a>משימות</a>
+              <a className="text-center">משימות</a>
             </li>
           </ul>
         </div>
       </div>
       <div className="navbar-center flex items-center gap-4">
-        <FaTasks
-          onClick={() => setCurrentData("table")}
-          className="btn-ghost"
-          size={20}
-        />
-        <a className="">מודולים</a>
+        {currentData == "home" && (
+          <>
+            <FaTasks
+              onClick={() => setCurrentData("table")}
+              className="btn-ghost"
+              size={20}
+            />
+            <a className="btn-ghost" onClick={() => setCurrentData("modules")}>
+              מודולים
+            </a>
+          </>
+        )}
+        {currentData != "home" && (
+          <AiOutlineHome
+            onClick={() => {
+              setCurrentData("home");
+              push("/mainDashboard");
+            }}
+            className=" text-blue-300"
+            size={"20px"}
+          />
+        )}
       </div>
       <div className="flex">
         <Actions />
@@ -110,86 +157,6 @@ const Nav = ({
           </div>
         </button>
       </div>
-    </div>
-  );
-};
-const L = mD[0] ? Object.values(mD[0]).length - 1 : 0;
-const Table = () => {
-  console.log({ L });
-  return (
-    <div className="mt-14 table-auto overflow-x-auto scroll-auto">
-      <table className=" flex w-full flex-col">
-        <thead>
-          <tr className=" sticky top-0">
-            {mD[0] &&
-              Object.keys(mD[0])
-                .reverse()
-                .map((h) => <th className="text-center">{h}</th>)}
-          </tr>
-        </thead>
-        <tbody>
-          {mD && (
-            <div>
-              {mD.map((row) => (
-                <tr>
-                  {Object.values(row)
-                    .reverse()
-                    .map((cell, i) => {
-                      if (row.סיווג == "קריטי" && !row.בוצע) {
-                        if (i > 0)
-                          return <td className="text-center">{cell}</td>;
-                        else if (typeof cell == "boolean")
-                          return (
-                            <td>
-                              <input
-                                // className="bg-slate-100"
-                                type="checkbox"
-                                checked={cell}
-                              />
-                            </td>
-                          );
-                      }
-                    })}
-                </tr>
-              ))}
-            </div>
-          )}
-          {mD && (
-            <div>
-              {mD.map((row) => (
-                <tr>
-                  {Object.values(row)
-                    .reverse()
-                    .map((cell, i) => {
-                      if (row.סיווג != "קריטי") {
-                        if (i > 0)
-                          return <td className="text-center">{cell}</td>;
-                        else if (typeof cell == "boolean")
-                          return (
-                            <td>
-                              <input
-                                // className="bg-slate-100"
-                                type="checkbox"
-                                checked={cell}
-                              />
-                            </td>
-                          );
-                      }
-                    })}
-                </tr>
-              ))}
-            </div>
-          )}
-        </tbody>
-        <tfoot>
-          <tr>
-            {mD[0] &&
-              Object.keys(mD[0])
-                .reverse()
-                .map((h) => <th className="text-center">{h}</th>)}
-          </tr>
-        </tfoot>
-      </table>
     </div>
   );
 };

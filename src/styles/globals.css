@@ -9,5 +9,5 @@
   }
 }
 body {
-  @apply bg-gradient-to-b from-[#363538] to-[#000000] text-white;
+  /* @apply bg-gradient-to-b from-[#363538] to-[#000000] text-white; */
 }

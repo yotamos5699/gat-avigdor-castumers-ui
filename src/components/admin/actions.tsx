@@ -9,7 +9,7 @@ function Actions() {
   const [isOpen, toggleIsOpen] = useState(false);
   const { setRenderdScreen } = useContext(AdminDataContext);
   return (
-    <div className="fixed top-2 right-2">
+    <div className=" fixed top-2 right-2">
       {!isOpen ? (
         <ul className="menu rounded-box  bg-base-100">
           <li>
@@ -20,7 +20,7 @@ function Actions() {
         </ul>
       ) : (
         setRenderdScreen && (
-          <ul className="menu rounded-box  bg-base-100">
+          <ul className="menu rounded-box fixed   bg-base-100">
             <li>
               <a
                 onClick={() => {
