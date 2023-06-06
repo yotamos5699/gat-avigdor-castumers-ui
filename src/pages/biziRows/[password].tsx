@@ -13,7 +13,7 @@ import TableData from "~/components/biziRows/Table";
 import Config from "~/components/biziRows/config";
 import { BsTelephone } from "react-icons/bs";
 
-export const colmsNumber = 10;
+export const colmsNumber = 12;
 
 export async function getServerSideProps(context: any) {
   const { params } = context;
@@ -130,13 +130,16 @@ export const AdminData = ({
             <div className="flex h-full flex-col ">
               <Actions />
               <div className="flex flex-col">
-                <h1 className="flex text-3xl font-extrabold tracking-tight text-gray-600 ">
+                <h1 className="ml-8 flex text-3xl font-extrabold tracking-tight text-gray-600 ">
                   Bizi
                   <span className="text-[hsl(280,100%,70%)]">row</span>{" "}
                   <span>
                     {" "}
                     <SiGithubactions />
                   </span>
+                  <p className="ml-2 mt-1 text-xl font-light text-gray-500">
+                    | הכל במקום אחד
+                  </p>
                 </h1>
 
                 <div className="   flex flex-row-reverse justify-center gap-6   ">
@@ -164,7 +167,7 @@ export const AdminData = ({
                 </div>
               </div>
               {headers && (
-                <div className="mb-2 flex h-20 w-full flex-row-reverse items-center justify-center   gap-4 rounded-t-lg    bg-gray-800   text-center text-white shadow-2xl">
+                <div className="mb-2 flex h-20 w-full flex-row-reverse items-center justify-center  gap-4  rounded-t-lg  bg-gray-800   text-center text-white ">
                   {headers.map((cell: headerType, index: number) => {
                     if (cell.toShow && index <= colmsNumber) {
                       if (cell.replacmentName == "טלפון")
@@ -181,7 +184,7 @@ export const AdminData = ({
                     }
                   })}
 
-                  <div className="header1  flex items-center justify-center rounded-md bg-green-500 text-center  text-white hover:bg-green-600 ">
+                  <div className="header1 flex h-10 w-1/5 items-center justify-center rounded-md bg-green-500 text-center font-semibold text-white hover:bg-green-600 ">
                     <input
                       onChange={(e) => {
                         const action = e.target.checked;
@@ -201,9 +204,9 @@ export const AdminData = ({
                       checked={globalChecking.matrix}
                       type="checkbox"
                     />
-                    <button className="gap-2">העבר הכל</button>
+                    <button className="gap-2">הפק הכל</button>
                   </div>
-                  <div className="header1 flex w-1/12 items-center justify-center rounded-md bg-red-500 text-center text-[15px] font-semibold text-white ring-red-300 hover:bg-red-600">
+                  <div className="header1 header2 flex h-10  w-1/5 items-center justify-center rounded-md bg-red-500 text-center text-[15px] font-semibold text-white ring-red-300 hover:bg-red-600">
                     <input
                       onChange={(e) => {
                         const action = e.target.checked;
@@ -222,7 +225,7 @@ export const AdminData = ({
                       checked={globalChecking.delete}
                       type="checkbox"
                     />
-                    <button className="">מחק הכל</button>
+                    <button className="">בטל הכל</button>
                   </div>
                 </div>
               )}

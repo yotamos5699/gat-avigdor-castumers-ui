@@ -11,12 +11,12 @@
 
 @layer components {
   .row1 {
-    @apply shadow-sm shadow-gray-600;
+    @apply shadow-md shadow-gray-300;
   }
   .cell1 {
-    @apply w-1/5 items-center  text-sm;
+    @apply w-1/5 items-center text-center text-sm;
   }
   .header1 {
-    @apply w-1/5 items-center;
+    @apply w-1/5 items-center text-center;
   }
 }

@@ -33,7 +33,7 @@ const Row = ({ row, handleClick }: Row) => {
       {row.status != "במטריצה" && (
         <button
           className={
-            "cell1 h-8 rounded-md bg-green-600 text-white hover:bg-green-700"
+            "cell1 h-8 rounded-md bg-green-600 font-semibold text-white hover:bg-green-700"
           }
           onClick={(e) => handleClick(e, row.rowID, "במטריצה", "row")}
         >
@@ -42,7 +42,7 @@ const Row = ({ row, handleClick }: Row) => {
       )}
       {row.status != "למחוק" && (
         <button
-          className="cell1 h-8 rounded-md bg-red-600 text-white hover:bg-red-700"
+          className="cell1 h-8  rounded-md bg-red-600 font-semibold text-white  hover:bg-red-700"
           onClick={(e) => handleClick(e, row.rowID, "למחוק", "row")}
         >
           לביטול
@@ -50,7 +50,7 @@ const Row = ({ row, handleClick }: Row) => {
       )}
       {row.status != "ללא" && (
         <button
-          className="cell1 bg-gray-400 text-black hover:bg-gray-500"
+          className="cell1  bg-gray-400 text-black hover:bg-gray-500"
           onClick={(e) => handleClick(e, row.rowID, "ללא", "row")}
         >
           איפוס
