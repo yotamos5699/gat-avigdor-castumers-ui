@@ -1,7 +1,8 @@
 import { useContext } from "react";
+import { FcPhone } from "react-icons/fc";
 import { AdminDataContext } from "~/context/adminContext";
 import { OrderLine, headerType } from "~/hooks/admin/helper";
-
+import { colmsNumber } from "~/pages/biziRows/[password]";
 interface Row {
   row: OrderLine;
   handleClick: (e: any, lineID: any, type: string, from: string) => void;
@@ -12,12 +13,18 @@ const Row = ({ row, handleClick }: Row) => {
   return (
     <div
       key={JSON.stringify(row)}
-      className="flex h-1/6 w-full flex-row-reverse items-center p-2 text-center  text-5xl text-white shadow-lg "
+      className="row1 flex h-20 flex-row-reverse items-center justify-center gap-4 overflow-auto"
     >
       {Object.values(row).map((cell: string, index: number) => {
-        if (headers && headers[index]?.toShow) {
+        if (headers && headers[index]?.toShow && index <= colmsNumber) {
+          if (headers[index]?.replacmentName == "טלפון")
+            return (
+              <a href={`tel:+972${cell}`}>
+                <FcPhone />
+              </a>
+            );
           return (
-            <p key={index} className="z-50 w-1/3 text-center text-[8px]">
+            <p key={index} className=" cell1	 text-center">
               {cell}
             </p>
           );
@@ -25,24 +32,26 @@ const Row = ({ row, handleClick }: Row) => {
       })}
       {row.status != "במטריצה" && (
         <button
+          className={
+            "cell1 h-8 rounded-md bg-green-600 text-white hover:bg-green-700"
+          }
           onClick={(e) => handleClick(e, row.rowID, "במטריצה", "row")}
-          className="w-1/3 bg-green-400 text-[8px] font-bold text-black"
         >
-          למטריצה
+          להפקה
         </button>
       )}
       {row.status != "למחוק" && (
         <button
+          className="cell1 h-8 rounded-md bg-red-600 text-white hover:bg-red-700"
           onClick={(e) => handleClick(e, row.rowID, "למחוק", "row")}
-          className="w-1/3 bg-red-400 text-[8px]"
         >
-          למחוק
+          לביטול
         </button>
       )}
       {row.status != "ללא" && (
         <button
+          className="cell1 bg-gray-400 text-black hover:bg-gray-500"
           onClick={(e) => handleClick(e, row.rowID, "ללא", "row")}
-          className="w-1/3 bg-blue-300 text-[8px] font-bold  text-gray-700"
         >
           איפוס
         </button>
@@ -54,7 +63,7 @@ const Row = ({ row, handleClick }: Row) => {
 const TableData = (props: any) => {
   // console.log("in table component", { headers });
   return (
-    <div className="h-full border-2 border-gray-600">
+    <div className="flex h-full flex-col border-2 border-gray-600">
       {props.data &&
         props.data.map((row: OrderLine, index: number) => {
           console.log("props type", props.type);

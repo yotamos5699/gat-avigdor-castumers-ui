@@ -8,6 +8,15 @@
     margin: 0;
   }
 }
-body {
-  /* @apply bg-gradient-to-b from-[#363538] to-[#000000] text-white; */
+
+@layer components {
+  .row1 {
+    @apply shadow-sm shadow-gray-600;
+  }
+  .cell1 {
+    @apply w-1/5 items-center  text-sm;
+  }
+  .header1 {
+    @apply w-1/5 items-center;
+  }
 }
