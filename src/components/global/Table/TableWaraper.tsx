@@ -45,12 +45,15 @@ type RowsProps = {
 export const TableRows = ({ Rows, addedStyles = "" }: RowsProps) => {
   const { TableData } = useTableData();
   const rowLength = Rows && Rows[0]?.length ? Rows[0]?.length : 1;
+
   return (
     <tbody>
       {Rows ? (
-        Rows.map((row) => (
+        Rows.map((row, index) => (
           <tr
-            className={`grid h-10 min-h-full table-auto grid-cols-6 items-center scroll-auto border-b-[1px] border-gray-200 bg-gray-100 text-center text-gray-800 `}
+            className={`${
+              index % 2 && "bg-slate-400"
+            } grid h-10 min-h-full table-auto grid-cols-6 items-center scroll-auto border-b-[1px] border-gray-200 bg-gray-100 text-center text-gray-800 `}
           >
             {row.reverse().map((cell, i) => (
               <TableCell
