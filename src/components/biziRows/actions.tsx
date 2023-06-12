@@ -20,7 +20,7 @@ function Actions() {
         </ul>
       ) : (
         setRenderdScreen && (
-          <ul className="menu rounded-box fixed   bg-base-100">
+          <ul className="menu rounded-box bg-base-100">
             <li>
               <a
                 onClick={() => {

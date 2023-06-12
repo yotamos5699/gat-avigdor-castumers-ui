@@ -8,6 +8,7 @@ import Image from "next/image";
 import { go2App } from "~/components/mainDashboard/utils/helper";
 import matrixlogo from "~/components/mainDashboard/modules/assets/matrixlogo.png";
 import graph from "~/components/mainDashboard/modules/assets/graph.jpg";
+import { useRouter } from "next/router";
 
 export interface Module_ {
   id: any;
@@ -68,7 +69,10 @@ function Modules() {
 
 export default Modules;
 
+const userOauth = () => "/123";
+
 const InuseModule = ({ m }: { m: Module_ }) => {
+  const { push } = useRouter();
   return (
     <div className={"mt-10 max-w-[90%]"}>
       <div className="  h-full w-full flex-col rounded-lg border border-gray-200 bg-white p-6 shadow dark:border-gray-700 dark:bg-gray-800">
@@ -90,7 +94,6 @@ const InuseModule = ({ m }: { m: Module_ }) => {
               </p>
             </div>
             <a
-              onClick={() => go2App({ m })}
               href="#"
               className=" mr-9  flex h-[50px] w-[50px] items-center justify-center rounded-lg bg-blue-700 px-3 py-2 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
             >
@@ -99,7 +102,10 @@ const InuseModule = ({ m }: { m: Module_ }) => {
           </div>
         </div>
         <a
-          onClick={() => go2App({ m })}
+          onClick={() => {
+            const res = go2App({ m });
+            res && push(res + userOauth());
+          }}
           href="#"
           className=" mt-[30px] mr-[35%] flex h-[40px] w-[120px] rounded-lg bg-blue-700 px-3 py-2 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
         >
@@ -142,3 +148,6 @@ const NotInuseModule = ({ m }: { m: Module_ }) => {
     </div>
   );
 };
+
+// git fetch upstream/main
+// git rebase upstream/main

@@ -28,7 +28,7 @@ const TableCell = ({
 }: CellProps) => {
   // console.log({ Headers });
   return (
-    <div className="  grid   ">
+    <div className="  grid ">
       {isVisible && type == "td" ? (
         <td className="h-full ">{data}</td>
       ) : (
@@ -45,12 +45,15 @@ type RowsProps = {
 export const TableRows = ({ Rows, addedStyles = "" }: RowsProps) => {
   const { TableData } = useTableData();
   const rowLength = Rows && Rows[0]?.length ? Rows[0]?.length : 1;
+
   return (
     <tbody>
       {Rows ? (
-        Rows.map((row) => (
+        Rows.map((row, index) => (
           <tr
-            className={`grid min-h-full table-auto grid-cols-6 scroll-auto text-center `}
+            className={`${
+              index % 2 && "bg-slate-400"
+            } grid h-10 min-h-full table-auto grid-cols-6 items-center scroll-auto border-b-[1px] border-gray-200 bg-gray-100 text-center text-gray-800 `}
           >
             {row.reverse().map((cell, i) => (
               <TableCell
@@ -74,10 +77,10 @@ export const TableRows = ({ Rows, addedStyles = "" }: RowsProps) => {
 };
 
 export const HeadersDiv = ({ Headers }: { Headers: string[] | null }) => (
-  <thead className="sticky top-14 ">
+  <thead className="sticky top-12 ">
     {Headers ? (
       <tr
-        className={`z-50 grid items-center  gap-0 border-2 border-gray-100 text-center  grid-cols-${Headers.length} `}
+        className={`z-50 grid h-20 w-screen items-center justify-center gap-4   rounded-t-lg bg-gray-800      text-center text-white   grid-cols-${Headers.length} `}
       >
         {Headers.reverse().map((cell) => (
           <TableCell data={cell} isVisible={true} type="th" />
@@ -86,14 +89,13 @@ export const HeadersDiv = ({ Headers }: { Headers: string[] | null }) => (
     ) : (
       <h1>no headers...</h1>
     )}
-    ;
   </thead>
 );
 
 export const FooterDiv = ({ Headers }: { Headers: string[] }) => (
   <tfoot>
     <tr
-      className={`grid w-full items-center text-center grid-cols-${Headers.length} `}
+      className={`grid items-center text-center grid-cols-${Headers.length} `}
     >
       {Headers.reverse().map((cell) => (
         <TableCell data={cell} isVisible={true} type="th" />

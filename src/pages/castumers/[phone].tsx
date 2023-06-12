@@ -117,21 +117,22 @@ export const getUserByPhone = ({ data }: { data: any }) => {
               <h3 className=" font-bold">שלח הזמנה →</h3>
             </a>
             {uuser?.pro && (
-              <div>
-                <div className="flex flex-col">
-                  <p>תאריך הזמנה</p>
-                  <input
-                    onChange={(e) => setDate(e.target.value)}
-                    type={"datetime-local"}
-                    className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-green-600"
-                  />
+              <>
+                <div>
+                  <div className="flex flex-col">
+                    <p>תאריך הזמנה</p>
+                    <input
+                      onChange={(e) => setDate(e.target.value)}
+                      type={"datetime-local"}
+                      className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-green-600"
+                    />
+                  </div>
                 </div>
-              </div>
-            )}
-            {uuser?.pro && (
-              <p className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-green-600">
-                יחידת מידה קילו
-              </p>
+
+                <p className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-green-600">
+                  יחידת מידה קילו
+                </p>
+              </>
             )}
           </div>
           <div className="flex flex-wrap items-center justify-center gap-8">
@@ -142,7 +143,6 @@ export const getUserByPhone = ({ data }: { data: any }) => {
               />
             ))}
           </div>
-          {/* <div>{JSON.stringify(data)}</div>{" "} */}
         </div>
       ) : (
         <div className="flex h-screen flex-col items-center justify-center">
@@ -157,40 +157,6 @@ export default getUserByPhone;
 
 const BaseUrl =
   "https://script.google.com/macros/s/AKfycbyfBt4Ueq6GAULew28xiJrl7T-dIfNDkNm1VZmAzLiD1MySjnTkP5icgtCARxNZ_wN4/exec?";
-
-export const userData = async (data: any, rout: string) => {
-  console.log("in user data function: ", { data });
-  return await axios
-    .get(BaseUrl + rout + data, { withCredentials: false })
-    .then((res) => {
-      const data = res.data;
-      console.log({ data });
-      return data;
-    })
-    .catch((e) => console.log);
-};
-
-// export const setOrderApi = async (row: string) => {
-//   return await axios
-//     .get(BaseUrl + "type=setorder&row=" + row, { withCredentials: false })
-//     .then((res) => {
-//       const data = res.data;
-//       console.log({ data });
-//       return data;
-//     })
-//     .catch((e) => console.log);
-// };
-//https://script.google.com/macros/s/AKfycbyfBt4Ueq6GAULew28xiJrl7T-dIfNDkNm1VZmAzLiD1MySjnTkP5icgtCARxNZ_wN4/exec?type=validate&id=502844123
-export async function getServerSideProps(context: any) {
-  const { params } = context;
-  const response = await userData(params.phone, "type=validate&id=");
-
-  return {
-    props: {
-      data: response,
-    },
-  };
-}
 
 export const Product = (props: any) => {
   const [inFocus, setInFocuse] = useState(false);
@@ -208,8 +174,6 @@ export const Product = (props: any) => {
 
   return (
     <div className="flex h-1/4 flex-col items-center ">
-      {/* <div className=" relative ml-8 mr-8  mb-8 h-48 w-48 transform bg-gray-800 transition duration-500 ease-in-out hover:-translate-y-1 hover:scale-110 hover:bg-gray-300 sm:w-8/12"> */}
-
       <p>{props.product.name}</p>
       <div className="mb-8 flex justify-center ">
         <button
@@ -221,7 +185,6 @@ export const Product = (props: any) => {
         >
           -
         </button>
-
         <div className="relative mr-2 ml-2  h-40  w-40 transform justify-center bg-gray-800 transition duration-500 ease-in-out hover:-translate-y-1 hover:scale-110 hover:bg-gray-300 ">
           <img
             id={props.product.id}
@@ -253,7 +216,6 @@ export const Product = (props: any) => {
               </p>
             )}
         </div>
-
         <button
           onClick={(e: any) =>
             props.editProductAmount(e.target.name, props.product.id)
@@ -264,7 +226,29 @@ export const Product = (props: any) => {
           +
         </button>
       </div>
-      {/* </div> */}
     </div>
   );
 };
+
+export const userData = async (data: any, rout: string) => {
+  console.log("in user data function: ", { data });
+  return await axios
+    .get(BaseUrl + rout + data, { withCredentials: false })
+    .then((res) => {
+      const data = res.data;
+      console.log({ data });
+      return data;
+    })
+    .catch((e) => console.log);
+};
+
+export async function getServerSideProps(context: any) {
+  const { params } = context;
+  const response = await userData(params.phone, "type=validate&id=");
+
+  return {
+    props: {
+      data: response,
+    },
+  };
+}
